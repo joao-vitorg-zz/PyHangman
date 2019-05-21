@@ -1,5 +1,5 @@
 ## How to play
-Playing this Hangman game is easy: Simply download the repository to your computer and run `main.py`! The game comes with its own included word list, `wordlist.txt`, which contains a list of 853 English words from which the game can draw.
+Playing this Hangman game is easy: Simply download the repository to your computer and run `main.py`! The game comes with its own included word list, `wordlist.txt`, which contains a list of 853 English words.
 
 ## Customization
 Want to specify your own list of words in place of the included `wordlist.txt`? Simply overwrite that file with a text file of your own of the same filename, with each word on a separate line. Compound words with spaces involved work, too (eg., ice cream).
