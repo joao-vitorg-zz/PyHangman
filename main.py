@@ -66,7 +66,7 @@ class Hangman:
         print(f" ╠{'═' * 11}╩{'═' * 19}╝")
 
     def final(self, mode):
-        with open('src/score.json', 'r') as f:
+        with open('files/score.json', 'r') as f:
             score = sorted(load(f).items(), key=lambda x: x[1], reverse=True)
 
         print('')
@@ -81,7 +81,7 @@ class Hangman:
         input('')
 
     def reg_score(self, name):
-        with open('src/score.json', 'r+') as f:
+        with open('files/score.json', 'r+') as f:
             points = 9 - self.level + len(self.word)
             json = load(f)
 
@@ -107,7 +107,7 @@ class Hangman:
 
     @staticmethod
     def random_word():
-        with open('src/wordlist.txt') as f:
+        with open('files/wordlist.txt') as f:
             return choice(f.read().splitlines()).upper()
 
     def formatted_letters(self):
