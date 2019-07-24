@@ -1,8 +1,11 @@
-from json import load, dump
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
+from json import load, dump, decoder
 from random import choice
 
 
-class Hangman:
+class Hangman(object):
     def __init__(self):
         while True:
             self.letters = 'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z'
@@ -55,42 +58,50 @@ class Hangman:
         body = self.get_body()
 
         print('')
-        print(f" ╔{'═' * 31}╗")
-        print(f" ║{'HANGMAN':^31}║")
-        print(f" ╠═════╤═════╦{'═' * 19}╣")
-        print(f" ║{body[0]:^11}║{letters[0]:^19}║")
-        print(f" ║{body[1]:^11}║{letters[1]:^19}║")
-        print(f" ║{body[2]:^11}║{letters[2]:^19}║")
-        print(f" ║{body[3]:^11}╠{'═' * 19}╣")
-        print(f" ║{body[4]:^11}║{self.mask:^19}║")
-        print(f" ╠{'═' * 11}╩{'═' * 19}╝")
+        print(" ╔═══════════════════════════════╗")
+        print(" ║{:^31}║".format('HANGMAN'))
+        print(" ╠═════╤═════╦═══════════════════╣")
+        print(" ║{:^11}║{:^19}║".format(body[0], letters[0]))
+        print(" ║{:^11}║{:^19}║".format(body[1], letters[2]))
+        print(" ║{:^11}║{:^19}║".format(body[2], letters[1]))
+        print(" ║{:^11}╠═══════════════════╣".format(body[3]))
+        print(" ║{:^11}║{:^19}║".format(body[4], self.mask))
+        print(" ╠═══════════╩═══════════════════╝")
 
     def final(self, mode):
-        with open('files/score.json', 'r') as f:
-            score = sorted(load(f).items(), key=lambda x: x[1], reverse=True)
+        try:
+            with open('files/score.json') as f:
+                score = list(load(f).items())
+        except decoder.JSONDecodeError:
+            score = []
 
         print('')
-        print(f" ╔{'═' * 16}╗")
-        print(f" ║{'YOU ' + mode:^16}║")
-        print(f" ╠{'═' * 16}╣")
-        print(f" ║{self.word:^16}║")
+        print(" ╔════════════════╗")
+        print(" ║{:^16}║".format('YOU ' + mode))
+        print(" ╠════════════════╣")
+        print(" ║{:^16}║".format(self.word))
         print(" ╠══════════╤═════╣")
         for name, points in score[:4]:
-            print(f" ║ {name:<8} │ {points:<4}║")
+            print(" ║ %-8s │ %-4s║" % (name, points))
         print(" ╚══════════╧═════╝")
-        input('')
+        input()
 
     def reg_score(self, name):
         with open('files/score.json', 'r+') as f:
             points = 9 - self.level + len(self.word)
-            json = load(f)
+            try:
+                json = load(f)
+            except decoder.JSONDecodeError:
+                json = {}
 
             if name in json:
                 json[name] += points
             else:
                 json[name] = points
             f.seek(0)
-            dump(json, f, indent=1)
+
+            json = sorted(json.items(), key=lambda x: x[1], reverse=True)
+            dump(dict(json), f, indent=1)
 
     def get_body(self):
         return (
